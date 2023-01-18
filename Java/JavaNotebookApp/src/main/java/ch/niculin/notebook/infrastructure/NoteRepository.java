@@ -1,6 +1,5 @@
 package ch.niculin.notebook.infrastructure;
 
-import ch.niculin.notebook.domain.model.Content;
 import ch.niculin.notebook.domain.model.Note;
 import ch.niculin.notebook.domain.model.NoteId;
 
@@ -13,6 +12,5 @@ public interface NoteRepository {
 
     void delete(NoteId id);
 
-    void update(NoteId noteId, Content content);
-
+    void update(Note note);
 }
