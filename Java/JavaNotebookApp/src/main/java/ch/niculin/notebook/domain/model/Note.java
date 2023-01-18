@@ -1,6 +1,7 @@
 package ch.niculin.notebook.domain.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Note {
     private NoteId noteId;
@@ -45,5 +46,27 @@ public class Note {
 
     public void setUpdated(LocalDate updated) {
         this.updated = updated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Note note = (Note) o;
+
+        if (!Objects.equals(noteId, note.noteId)) return false;
+        if (!Objects.equals(content, note.content)) return false;
+        if (!Objects.equals(created, note.created)) return false;
+        return Objects.equals(updated, note.updated);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = noteId != null ? noteId.hashCode() : 0;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (created != null ? created.hashCode() : 0);
+        result = 31 * result + (updated != null ? updated.hashCode() : 0);
+        return result;
     }
 }
