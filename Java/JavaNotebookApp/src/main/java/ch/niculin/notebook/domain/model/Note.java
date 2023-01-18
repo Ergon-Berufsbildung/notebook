@@ -5,12 +5,11 @@ import java.util.Objects;
 
 public class Note {
     private NoteId noteId;
-    private Content content;
-    private LocalDate created;
-    private LocalDate updated;
+    private final Content content;
+    private final LocalDate created;
+    private final LocalDate updated;
 
-    public Note(NoteId noteId, Content content, LocalDate created, LocalDate updated) {
-        this.noteId = noteId;
+    public Note(Content content, LocalDate created, LocalDate updated) {
         this.content = content;
         this.created = created;
         this.updated = updated;
@@ -28,24 +27,12 @@ public class Note {
         return content;
     }
 
-    public void setContent(Content content) {
-        this.content = content;
-    }
-
     public LocalDate getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
-        this.created = created;
-    }
-
     public LocalDate getUpdated() {
         return updated;
-    }
-
-    public void setUpdated(LocalDate updated) {
-        this.updated = updated;
     }
 
     @Override
