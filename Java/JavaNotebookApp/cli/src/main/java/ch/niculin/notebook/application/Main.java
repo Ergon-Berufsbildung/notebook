@@ -1,4 +1,4 @@
-package ch.niculin;
+package ch.niculin.notebook.application;
 
 public class Main {
     public static void main(String[] args) {
