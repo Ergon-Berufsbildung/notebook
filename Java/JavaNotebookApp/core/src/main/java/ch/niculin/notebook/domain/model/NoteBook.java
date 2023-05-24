@@ -1,22 +1,15 @@
 package ch.niculin.notebook.domain.model;
 
-public class NoteBook {
-    private String name;
-    private Note[] notebook;
+import java.util.LinkedList;
 
-    public Note[] getNotebook() {
+public class NoteBook {
+    private LinkedList<NoteTO> notebook;
+
+    public LinkedList<NoteTO> getNotebook() {
         return notebook;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setNotebook(Note[] notebook) {
+    public void setNotebook(LinkedList<NoteTO> notebook) {
         this.notebook = notebook;
     }
 }
