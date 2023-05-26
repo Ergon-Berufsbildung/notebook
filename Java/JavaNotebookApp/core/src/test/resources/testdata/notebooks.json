@@ -1,0 +1,58 @@
+[
+  {
+    "id": 0,
+    "name": "notebook1",
+    "listOfNotes": [
+      {
+        "id": 0,
+        "content": "test3",
+        "created": "2023-05-11",
+        "updated": "2023-05-11"
+      },
+      {
+        "id": 1,
+        "content": "test4",
+        "created": "2023-05-11",
+        "updated": "2023-05-11"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "notebook2",
+    "listOfNotes": [
+      {
+        "id": 2,
+        "content": "test3",
+        "created": "2023-05-11",
+        "updated": "2023-05-11"
+      },
+      {
+        "id": 3,
+        "content": "test4",
+        "created": "2023-05-11",
+        "updated": "2023-05-11"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "name",
+    "listOfNotes": []
+  },
+  {
+    "id": 3,
+    "name": "name",
+    "listOfNotes": []
+  },
+  {
+    "id": 4,
+    "name": "test",
+    "listOfNotes": []
+  },
+  {
+    "id": 5,
+    "name": "test",
+    "listOfNotes": []
+  }
+]
