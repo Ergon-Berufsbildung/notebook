@@ -1,4 +1,4 @@
-package ch.niculin.notebook.domain.model;
+package ch.niculin.notebook.domain.model.Note;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

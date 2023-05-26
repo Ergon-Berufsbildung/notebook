@@ -1,10 +1,11 @@
 package ch.niculin.notebook.domain.model;
 
+import ch.niculin.notebook.domain.model.Note.NoteId;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NoteIdTest {
+class NoteTOIdTest {
 
     @Test
     void testValidNoteId() {

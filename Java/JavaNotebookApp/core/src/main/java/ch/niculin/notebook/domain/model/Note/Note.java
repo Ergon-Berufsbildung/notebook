@@ -1,19 +1,21 @@
-package ch.niculin.notebook.domain.model;
+package ch.niculin.notebook.domain.model.Note;
 
 import java.time.LocalDate;
 
 public class Note {
 
-    private NoteId noteId;
+    private final NoteId noteId;
     private Content content;
     private final LocalDate created;
     private LocalDate updated;
 
-    public Note(Content content, LocalDate created, LocalDate updated) {
+    public Note(NoteId noteId, Content content, LocalDate created, LocalDate updated) {
         this.content = content;
         this.created = created;
         this.updated = updated;
+        this.noteId = noteId;
     }
+
 
     public NoteId getNoteId() {
         return noteId;

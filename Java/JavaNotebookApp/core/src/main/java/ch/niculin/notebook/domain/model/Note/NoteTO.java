@@ -1,31 +1,37 @@
-package ch.niculin.notebook.domain.model;
+package ch.niculin.notebook.domain.model.Note;
 
 import ch.niculin.notebook.infrastructure.LocalDateDeserializer;
 import ch.niculin.notebook.infrastructure.LocalDateSerializer;
-import com.fasterxml.jackson.annotation.*;
+import ch.niculin.notebook.infrastructure.note.NoteDeserializer;
+import ch.niculin.notebook.infrastructure.note.NoteSerializer;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-//TODO custom serializer/deserializer: https://www.baeldung.com/jackson-object-mapper-tutorial#bd-Advanced
+@JsonSerialize(using = NoteSerializer.class)
+@JsonDeserialize(using = NoteDeserializer.class)
 public class NoteTO {
     private NoteId noteId;
-    private final Content content;
+    private Content content;
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    private final LocalDate created;
+    private LocalDate created;
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    private final LocalDate updated;
+    private LocalDate updated;
 
+    public NoteTO() {
+    }
 
     @JsonCreator()
     public NoteTO(@JsonProperty("content")
-                Content content, @JsonProperty("created")
-                LocalDate created, @JsonProperty("updated")
-                LocalDate updated) {
+                  Content content, @JsonProperty("created")
+                  LocalDate created, @JsonProperty("updated")
+                  LocalDate updated) {
         this.content = content;
         this.created = created;
         this.updated = updated;
@@ -47,11 +53,21 @@ public class NoteTO {
         return updated;
     }
 
-    @JsonSetter("noteId")
     public void setNoteId(NoteId noteId) {
         this.noteId = noteId;
     }
 
+    public void setContent(Content content) {
+        this.content = content;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
+    }
+
+    public void setUpdated(LocalDate updated) {
+        this.updated = updated;
+    }
 
     @Override
     public boolean equals(Object o) {
