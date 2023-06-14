@@ -2,7 +2,7 @@ package ch.niculin.notebook.infrastructure.notebook;
 
 import ch.niculin.notebook.domain.model.notebook.NotebookName;
 
-import java.util.List;
+import java.util.Set;
 
 public interface NotebookRepository {
 
@@ -10,5 +10,7 @@ public interface NotebookRepository {
 
     void deleteNotebookByName(NotebookName notebookName);
 
-    List<NotebookTO> getAllNotebooks();
+    Set<NotebookTO> getAllNotebooks();
+
+    NotebookTO getNotebookByName(NotebookName notebookName);
 }

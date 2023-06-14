@@ -53,4 +53,19 @@ public class NotebookTO {
                ", listOfNotes=" + listOfNotes +
                '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NotebookTO that = (NotebookTO) o;
+
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

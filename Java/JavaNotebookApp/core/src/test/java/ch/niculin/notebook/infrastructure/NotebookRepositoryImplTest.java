@@ -1,18 +1,25 @@
 package ch.niculin.notebook.infrastructure;
 
+import ch.niculin.notebook.domain.model.notebook.NotebookId;
+import ch.niculin.notebook.domain.model.notebook.NotebookName;
 import ch.niculin.notebook.infrastructure.notebook.NotebookRepositoryImpl;
+import ch.niculin.notebook.infrastructure.notebook.NotebookTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NotebookRepositoryImplTest {
 
     private NotebookRepositoryImpl notebookRepository;
     private static final String DEFAULT_NOTEBOOK = "notebooks.json";
-
 
 
     Path path;
@@ -22,20 +29,70 @@ class NotebookRepositoryImplTest {
     Path tempdir;
 
     @BeforeEach
-    void init(){
-        path = Path.of("src/test/resources/testdata/notebooks.json");
+    void init() {
+        try {
+            path = Files.createFile(tempdir.resolve("mainNotebook"));
+            Files.writeString(path, "[]");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         file = path.toFile();
+        System.out.println("File created in: " + path);
         notebookRepository = new NotebookRepositoryImpl(file);
     }
 
     @Test
-    void loadAllNotes(){
-        notebookRepository.getAllNotebooks();
+    void addEmptyNotebook() {
+        notebookRepository.addNotebook("test1");
+        notebookRepository.addNotebook("test2");
+        assertEquals(getExpectedFile(), getActual());
+    }
+
+    private String getActual() {
+        String actual;
+        try {
+            actual = new String(Files.readAllBytes(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return actual;
     }
 
     @Test
-    void addEmptyNotebook(){
-        notebookRepository.addNotebook("test");
+    void deleteNotebook() {
+        notebookRepository.addNotebook("test1");
+        notebookRepository.addNotebook("test2");
+        notebookRepository.addNotebook("test3");
+        notebookRepository.deleteNotebookByName(new NotebookName("test3"));
+        assertEquals(getExpectedFile(), getActual());
+    }
+
+    @Test
+    void getNotebookByName() {
+        NotebookTO expectedNotebook = getExpectedNotebook();
+        notebookRepository.addNotebook("test1");
+        notebookRepository.addNotebook("test2");
+        NotebookTO notebookTO = notebookRepository.getNotebookByName(new NotebookName("test1"));
+        assertEquals(expectedNotebook, notebookTO);
+    }
+
+    private static NotebookTO getExpectedNotebook() {
+        NotebookTO expectedNotebook = new NotebookTO();
+        expectedNotebook.setId(new NotebookId(0));
+        expectedNotebook.setName(new NotebookName("test1"));
+        expectedNotebook.setListOfNotes(new LinkedList<>());
+        return expectedNotebook;
+    }
+
+    private static String getExpectedFile() {
+        String expected;
+        try {
+            expected = new String(Files.readAllBytes(Path.of("src/test/resources/testdata/" + NotebookRepositoryImplTest.DEFAULT_NOTEBOOK))).replace("\n", "").replace("\r", "");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return expected.replaceAll("\\s", "");
     }
 
 }
