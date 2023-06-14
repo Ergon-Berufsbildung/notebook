@@ -1,11 +1,10 @@
 package ch.niculin.notebook.infrastructure.notebook;
 
 import ch.niculin.notebook.domain.model.Note.Note;
-import ch.niculin.notebook.domain.model.Note.NoteTO;
+import ch.niculin.notebook.infrastructure.note.NoteTO;
 import ch.niculin.notebook.domain.model.notebook.Notebook;
 import ch.niculin.notebook.domain.model.notebook.NotebookId;
 import ch.niculin.notebook.domain.model.notebook.NotebookName;
-import ch.niculin.notebook.domain.model.notebook.NotebookTO;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,9 +65,7 @@ public class NotebookRepositoryImpl implements NotebookRepository {
         notebook.setNotebookId(notebookTO.getId());
         notebook.setNotebookName(notebookTO.getName());
         LinkedList<Note> notes = new LinkedList<>();
-        notebookTO.getListOfNotes().forEach(noteTO -> {
-            notes.add(convertToNote(noteTO));
-        });
+        notebookTO.getListOfNotes().forEach(noteTO -> notes.add(convertToNote(noteTO)));
         notebook.setNotes(notes);
         return notebook;
 

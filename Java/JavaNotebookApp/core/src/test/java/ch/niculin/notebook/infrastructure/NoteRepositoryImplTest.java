@@ -1,9 +1,8 @@
 package ch.niculin.notebook.infrastructure;
 
 import ch.niculin.notebook.domain.model.Note.Content;
-import ch.niculin.notebook.domain.model.Note.NoteTO;
+import ch.niculin.notebook.infrastructure.note.NoteTO;
 import ch.niculin.notebook.domain.model.Note.NoteId;
-import ch.niculin.notebook.domain.model.notebook.NotebookName;
 import ch.niculin.notebook.infrastructure.note.NoteRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,7 @@ class NoteRepositoryImplTest {
 
     @Test
     void testAddDataToEmptyNotebook() {
-        String expected = getExpectedFile(DEFAULT_NOTEBOOK);
+        String expected = getExpectedFile();
         String actual;
 
 
@@ -68,7 +67,7 @@ class NoteRepositoryImplTest {
 
         List<NoteTO> repoAfterAdd = noteRepository.loadAll();
 
-        assertEquals(getExpectedFile(DEFAULT_NOTEBOOK), getActual());
+        assertEquals(getExpectedFile(), getActual());
         assertNotEquals(repoAfterAdd.size(), repoBeforeAdd.size());
     }
 
@@ -81,7 +80,7 @@ class NoteRepositoryImplTest {
 
 
         noteRepository.delete(new NoteId(2));
-        assertEquals(getExpectedFile(DEFAULT_NOTEBOOK).getBytes(StandardCharsets.UTF_8).length, getActual().getBytes(StandardCharsets.UTF_8).length);
+        assertEquals(getExpectedFile().getBytes(StandardCharsets.UTF_8).length, getActual().getBytes(StandardCharsets.UTF_8).length);
     }
 
     @Test
@@ -97,19 +96,14 @@ class NoteRepositoryImplTest {
         return noteRepository.loadAll();
     }
 
-
-    private NoteTO createNote(String content) {
-        return new NoteTO(new Content(content), LocalDate.now(), LocalDate.now());
-    }
-
     private NoteTO getNoteById(NoteId id, List<NoteTO> notebook) {
         return notebook.stream().filter(note -> note.getNoteId().equals(id)).findFirst().orElseThrow();
     }
 
-    private static String getExpectedFile(String fileName) {
+    private static String getExpectedFile() {
         String expected;
         try {
-            expected = new String(Files.readAllBytes(Path.of("src/test/resources/testdata/" + fileName)));
+            expected = new String(Files.readAllBytes(Path.of("src/test/resources/testdata/" + NoteRepositoryImplTest.DEFAULT_NOTEBOOK)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

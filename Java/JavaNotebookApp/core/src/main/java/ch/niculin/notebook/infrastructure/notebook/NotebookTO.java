@@ -1,11 +1,10 @@
-package ch.niculin.notebook.domain.model.notebook;
+package ch.niculin.notebook.infrastructure.notebook;
 
-import ch.niculin.notebook.domain.model.Note.NoteTO;
-import ch.niculin.notebook.infrastructure.notebook.NotebookDeserializer;
-import ch.niculin.notebook.infrastructure.notebook.NotebookSerializer;
+import ch.niculin.notebook.domain.model.notebook.NotebookId;
+import ch.niculin.notebook.domain.model.notebook.NotebookName;
+import ch.niculin.notebook.infrastructure.note.NoteTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.LinkedList;

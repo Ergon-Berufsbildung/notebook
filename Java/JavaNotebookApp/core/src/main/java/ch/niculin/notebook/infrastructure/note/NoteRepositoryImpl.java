@@ -1,6 +1,5 @@
 package ch.niculin.notebook.infrastructure.note;
 
-import ch.niculin.notebook.domain.model.Note.NoteTO;
 import ch.niculin.notebook.domain.model.notebook.Notebook;
 import ch.niculin.notebook.domain.model.Note.NoteId;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +54,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         jsonNote.put("created", noteTO.getCreated().toString());
         jsonNote.put("updated", noteTO.getUpdated().toString());
         map.put("notebook", parentArray);
-
+        System.out.println(noteTO);
         writeNoteBook();
     }
 
@@ -126,8 +125,4 @@ public class NoteRepositoryImpl implements NoteRepository {
         return notebook.stream().filter(note -> note.getNoteId().equals(id)).findFirst().orElseThrow();
     }
 */
-
-    public File getFile() {
-        return file;
-    }
 }

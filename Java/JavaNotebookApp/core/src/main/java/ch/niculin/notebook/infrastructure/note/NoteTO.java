@@ -1,9 +1,9 @@
-package ch.niculin.notebook.domain.model.Note;
+package ch.niculin.notebook.infrastructure.note;
 
+import ch.niculin.notebook.domain.model.Note.Content;
+import ch.niculin.notebook.domain.model.Note.NoteId;
 import ch.niculin.notebook.infrastructure.LocalDateDeserializer;
 import ch.niculin.notebook.infrastructure.LocalDateSerializer;
-import ch.niculin.notebook.infrastructure.note.NoteDeserializer;
-import ch.niculin.notebook.infrastructure.note.NoteSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

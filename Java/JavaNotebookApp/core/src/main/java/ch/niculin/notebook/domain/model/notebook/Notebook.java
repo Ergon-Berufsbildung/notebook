@@ -1,7 +1,6 @@
 package ch.niculin.notebook.domain.model.notebook;
 
 import ch.niculin.notebook.domain.model.Note.Note;
-import ch.niculin.notebook.domain.model.Note.NoteTO;
 
 import java.util.LinkedList;
 

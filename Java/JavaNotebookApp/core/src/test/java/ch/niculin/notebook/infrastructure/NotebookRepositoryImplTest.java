@@ -1,6 +1,5 @@
 package ch.niculin.notebook.infrastructure;
 
-import ch.niculin.notebook.domain.model.notebook.NotebookTO;
 import ch.niculin.notebook.infrastructure.notebook.NotebookRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

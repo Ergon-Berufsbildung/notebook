@@ -1,7 +1,7 @@
 package ch.niculin.notebook.domain.model.Note;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public record NoteId(int id) {
 

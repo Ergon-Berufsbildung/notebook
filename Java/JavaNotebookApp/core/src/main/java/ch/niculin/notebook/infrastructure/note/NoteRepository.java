@@ -1,6 +1,5 @@
 package ch.niculin.notebook.infrastructure.note;
 
-import ch.niculin.notebook.domain.model.Note.NoteTO;
 import ch.niculin.notebook.domain.model.Note.NoteId;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package ch.niculin.notebook.infrastructure.note;
 
-import ch.niculin.notebook.domain.model.Note.NoteTO;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
