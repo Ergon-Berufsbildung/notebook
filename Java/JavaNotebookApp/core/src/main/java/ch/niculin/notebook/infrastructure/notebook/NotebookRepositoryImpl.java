@@ -1,9 +1,12 @@
 package ch.niculin.notebook.infrastructure.notebook;
 
+import ch.niculin.notebook.domain.model.Note.Content;
 import ch.niculin.notebook.domain.model.Note.Note;
+import ch.niculin.notebook.domain.model.Note.NoteId;
 import ch.niculin.notebook.domain.model.notebook.Notebook;
 import ch.niculin.notebook.domain.model.notebook.NotebookId;
 import ch.niculin.notebook.domain.model.notebook.NotebookName;
+import ch.niculin.notebook.infrastructure.DateProviderImpl;
 import ch.niculin.notebook.infrastructure.note.NoteTO;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,14 +15,13 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class NotebookRepositoryImpl implements NotebookRepository {
     private final File file;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private int noteId = 0;
+    private int notebookId = 0;
 
     public NotebookRepositoryImpl(File file) {
         this.file = file;
@@ -28,10 +30,9 @@ public class NotebookRepositoryImpl implements NotebookRepository {
     @Override
     public void addNotebook(String name) {
         NotebookTO notebookTO = new NotebookTO();
-        notebookTO.setId(new NotebookId(getCurrentId()));
+        notebookTO.setId(new NotebookId(notebookId));
         notebookTO.setName(new NotebookName(name));
         notebookTO.setListOfNotes(new LinkedList<>());
-
         SimpleModule simpleModule = new SimpleModule("NotebookSerializer", new Version(1, 0, 0, null, null, null));
         simpleModule.addSerializer(NotebookTO.class, new NotebookSerializer());
         objectMapper.registerModule(simpleModule);
@@ -42,6 +43,7 @@ public class NotebookRepositoryImpl implements NotebookRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        notebookId++;
     }
 
     @Override
@@ -90,11 +92,79 @@ public class NotebookRepositoryImpl implements NotebookRepository {
 
     }
 
-    private Note convertToNote(NoteTO noteTO) {
-        return new Note(noteTO.getNoteId(), noteTO.getContent(), noteTO.getCreated(), noteTO.getUpdated());
+    @Override
+    public void addNote(Content content, NotebookName notebookName) {
+        Set<NotebookTO> notebookTOS = getAllNotebooks();
+        NoteTO noteTO = createNoteTO(content);
+        noteId++;
+        getListOfNotes(notebookTOS, notebookName)
+                .add(noteTO);
+        try {
+            objectMapper.writeValue(file, notebookTOS.stream().toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private int getCurrentId() {
-        return getAllNotebooks().size();
+    @Override
+    public List<NoteTO> getAllNotes(NotebookName notebookName) {
+        return getListOfNotes(getAllNotebooks(), notebookName);
+    }
+
+    @Override
+    public void deleteNote(NotebookName notebookName, NoteId noteId) {
+        try {
+            objectMapper.writeValue(file, getListOfNotes(getAllNotebooks(), notebookName)
+                    .removeIf(noteTO -> noteTO.getNoteId().equals(noteId)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public NoteTO getNoteById(NotebookName notebookName, NoteId noteId) {
+        return getListOfNotes(getAllNotebooks(), notebookName).stream()
+                .filter(noteTO -> noteTO.getNoteId().equals(noteId))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private LinkedList<NoteTO> getListOfNotes(Set<NotebookTO> allNotebooks, NotebookName notebookName) {
+        return allNotebooks.stream()
+                .filter(notebookTO -> notebookTO.getName().equals(notebookName))
+                .findFirst()
+                .orElseThrow()
+                .getListOfNotes();
+    }
+
+
+    @Override
+    public void updateNoteContent(NotebookName notebookName, NoteId noteId, Content newContent) {
+        Set<NotebookTO> notebookTOS = getAllNotebooks();
+
+        notebookTOS.stream()
+                .filter(notebookTO -> notebookTO.getName().equals(notebookName))
+                .findFirst()
+                .orElseThrow()
+                .getListOfNotes()
+                .stream()
+                .filter(noteTO -> noteTO.getNoteId().equals(noteId))
+                .findFirst()
+                .orElseThrow()
+                .setContent(newContent);
+        try {
+            objectMapper.writeValue(file, notebookTOS);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private NoteTO createNoteTO(Content content) {
+        return new NoteTO(new NoteId(noteId), content, new DateProviderImpl().getDate(), new DateProviderImpl().getDate());
+    }
+
+    private Note convertToNote(NoteTO noteTO) {
+        return new Note(noteTO.getNoteId(), noteTO.getContent(), noteTO.getCreated(), noteTO.getUpdated());
     }
 }

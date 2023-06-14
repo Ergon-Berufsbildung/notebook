@@ -28,10 +28,11 @@ public class NoteTO {
     }
 
     @JsonCreator()
-    public NoteTO(@JsonProperty("content")
-                  Content content, @JsonProperty("created")
-                  LocalDate created, @JsonProperty("updated")
-                  LocalDate updated) {
+    public NoteTO(@JsonProperty("noteId") NoteId noteId,
+                  @JsonProperty("content") Content content,
+                  @JsonProperty("created") LocalDate created,
+                  @JsonProperty("updated") LocalDate updated) {
+        this.noteId = noteId;
         this.content = content;
         this.created = created;
         this.updated = updated;

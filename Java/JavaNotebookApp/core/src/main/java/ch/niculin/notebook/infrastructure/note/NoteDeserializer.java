@@ -19,7 +19,7 @@ public class NoteDeserializer extends JsonDeserializer<NoteTO> {
         objectMapper.setConfig(deserializationContext.getConfig());
         JsonNode node = objectMapper.readTree(jsonParser);
         NoteTO noteTO = new NoteTO();
-        noteTO.setNoteId(new NoteId(node.get("id").asInt()));
+        noteTO.setNoteId(new NoteId(node.get("noteId").asInt()));
         noteTO.setContent(new Content(node.get("content").asText()));
         noteTO.setCreated(LocalDate.parse(node.get("created").asText()));
         noteTO.setUpdated(LocalDate.parse(node.get("updated").asText()));
