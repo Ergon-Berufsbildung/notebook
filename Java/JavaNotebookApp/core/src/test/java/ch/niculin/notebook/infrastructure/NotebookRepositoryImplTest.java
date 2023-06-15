@@ -27,6 +27,7 @@ class NotebookRepositoryImplTest {
     private NotebookRepositoryImpl notebookRepository;
     private static final String DEFAULT_NOTEBOOK = "notebooks.json";
     private static final String NOTEBOOK1 = "notebook.json";
+    private static final LocalDate DATE = LocalDate.now();
 
 
     Path path;
@@ -85,7 +86,7 @@ class NotebookRepositoryImplTest {
 
     @Test
     void addNote() {
-        String expectedFile = getExpectedFileNote();
+        String expectedFile = getExpectedFileForNoteTests();
         initNotebook();
         assertEquals(expectedFile, getActual());
     }
@@ -100,11 +101,10 @@ class NotebookRepositoryImplTest {
     void getAllNotes() {
         initNotebook();
         List<NoteTO> expected = new ArrayList<>();
-        expected.add(new NoteTO(new NoteId(0), new Content("content1"), LocalDate.now(), LocalDate.now()));
-        expected.add(new NoteTO(new NoteId(1), new Content("content2"), LocalDate.now(), LocalDate.now()));
+        expected.add(getNewNoteTO(new NoteId(0), new Content("content1")));
+        expected.add(getNewNoteTO(new NoteId(1), new Content("content2")));
 
         List<NoteTO> actual = notebookRepository.getAllNotes(new NotebookName("test1"));
-
         assertEquals(expected, actual);
     }
 
@@ -115,7 +115,7 @@ class NotebookRepositoryImplTest {
 
         notebookRepository.deleteNote(new NotebookName("test1"), new NoteId(2));
 
-        assertEquals(getExpectedFileNote(), getActual());
+        assertEquals(getExpectedFileForNoteTests(), getActual());
     }
 
     @Test
@@ -136,7 +136,7 @@ class NotebookRepositoryImplTest {
 
         notebookRepository.updateNoteContent(new NotebookName("test1"), new NoteId(1), new Content("content2"));
 
-        assertEquals(getExpectedFileNote(), getActual());
+        assertEquals(getExpectedFileForNoteTests(), getActual());
     }
 
     private static NotebookTO getExpectedNotebook() {
@@ -158,9 +158,10 @@ class NotebookRepositoryImplTest {
         return expected.replaceAll("\\s", "");
     }
 
-    private static String getExpectedFileNote() {
+    private static String getExpectedFileForNoteTests() {
         String expected;
         try {
+            Files.writeString(Path.of("src/test/resources/testdata/" + NOTEBOOK1), "[{\"id\":0,\"name\":\"test1\",\"listOfNotes\":[{\"noteId\":0,\"content\":\"content1\",\"created\":\"" + DATE + "\",\"updated\":\"" + DATE + "\"},{\"noteId\":1,\"content\":\"content2\",\"created\":\"" + DATE + "\",\"updated\":\"" + DATE + "\"}]}]");
             expected = new String(Files.readAllBytes(Path.of("src/test/resources/testdata/" + NotebookRepositoryImplTest.NOTEBOOK1))).replace("\n", "").replace("\r", "");
 
         } catch (IOException e) {
@@ -168,4 +169,9 @@ class NotebookRepositoryImplTest {
         }
         return expected.replaceAll("\\s", "");
     }
+
+    private NoteTO getNewNoteTO(NoteId noteId, Content content) {
+        return new NoteTO(noteId, content, DATE, DATE);
+    }
+
 }

@@ -113,9 +113,11 @@ public class NotebookRepositoryImpl implements NotebookRepository {
 
     @Override
     public void deleteNote(NotebookName notebookName, NoteId noteId) {
+        Set<NotebookTO> notebookTOS = getAllNotebooks();
+        getListOfNotes(notebookTOS, notebookName)
+                .removeIf(noteTO -> noteTO.getNoteId().equals(noteId));
         try {
-            objectMapper.writeValue(file, getListOfNotes(getAllNotebooks(), notebookName)
-                    .removeIf(noteTO -> noteTO.getNoteId().equals(noteId)));
+            objectMapper.writeValue(file, notebookTOS.stream().toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +144,21 @@ public class NotebookRepositoryImpl implements NotebookRepository {
     public void updateNoteContent(NotebookName notebookName, NoteId noteId, Content newContent) {
         Set<NotebookTO> notebookTOS = getAllNotebooks();
 
-        notebookTOS.stream()
+        getNoteTO(notebookName, noteId, notebookTOS)
+                .setContent(newContent);
+        getNoteTO(notebookName, noteId, notebookTOS)
+                .setUpdated(new DateProviderImpl().getDate());
+
+        try {
+            objectMapper.writeValue(file, notebookTOS);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static NoteTO getNoteTO(NotebookName notebookName, NoteId noteId, Set<NotebookTO> notebookTOS) {
+        return notebookTOS.stream()
                 .filter(notebookTO -> notebookTO.getName().equals(notebookName))
                 .findFirst()
                 .orElseThrow()
@@ -150,14 +166,7 @@ public class NotebookRepositoryImpl implements NotebookRepository {
                 .stream()
                 .filter(noteTO -> noteTO.getNoteId().equals(noteId))
                 .findFirst()
-                .orElseThrow()
-                .setContent(newContent);
-        try {
-            objectMapper.writeValue(file, notebookTOS);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+                .orElseThrow();
     }
 
     private NoteTO createNoteTO(Content content) {

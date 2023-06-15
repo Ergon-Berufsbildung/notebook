@@ -10,10 +10,26 @@ public record NoteId(int id) {
             throw new IllegalArgumentException("Id can't be lower than 0");
         }
     }
+
     @Override
     @JsonValue
     @JsonProperty("id")
     public int id() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NoteId noteId = (NoteId) o;
+
+        return id == noteId.id;
+    }
+
+    @Override
+    public int hashCode() {
         return id;
     }
 }
